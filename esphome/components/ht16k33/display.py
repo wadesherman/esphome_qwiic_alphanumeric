@@ -10,13 +10,15 @@ HT16K33Component = ht16k33_ns.class_(
     "HT16K33Component", cg.Component, i2c.I2CDevice
 )
 
+CONF_BRIGHTNESS = "brightness"
+
 HT16K33ComponentRef = HT16K33Component.operator("ref")
 
 CONFIG_SCHEMA = (
     display.BASIC_DISPLAY_SCHEMA.extend(
         {
             cv.GenerateID(): cv.declare_id(HT16K33Component),
-            cv.Required('default_brightness'): cv.int_range(0, 15),
+            cv.Required(CONF_BRIGHTNESS): cv.int_range(0, 15),
             # default intensity
         }
     )
@@ -27,9 +29,10 @@ CONFIG_SCHEMA = (
 
 async def to_code(config):
     var = cg.new_Pvariable(config[CONF_ID])
-    cg.add(var.set_brightness(config['default_brightness']))
     await i2c.register_i2c_device(var, config)
     await display.register_display(var, config)
+
+    cg.add(var.set_brightness(config[CONF_BRIGHTNESS]))
 
     if CONF_LAMBDA in config:
         lambda_ = await cg.process_lambda(

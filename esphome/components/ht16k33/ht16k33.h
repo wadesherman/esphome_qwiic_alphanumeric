@@ -74,6 +74,9 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   bool write_data(uint8_t *mem);
   bool write_command(uint8_t reg);
 
+  // lambda
+  void call_writer() { this->writer_(*this); }
+
  public:
 
   void setup() override;
@@ -93,6 +96,11 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   size_t write(const char *str);
 
   bool update_display();
+
+  // lambda
+  void set_writer(std::function<void(HT16K33Component &)> &&writer) { this->writer_ = std::move(writer); }
+  std::function<void(HT16K33Component &)> writer_;
+
 };
 
 }  // namespace ht16k33
