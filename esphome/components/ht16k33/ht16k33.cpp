@@ -99,18 +99,13 @@ size_t HT16K33Component::write(uint16_t *encoded_chars) {
     }
   }
 
-  update_display();  // Send RAM buffer over I2C bus
+  update_display();
 
   return 0;
 }
 
-size_t HT16K33Component::write(const char *str) {
-  uint16_t encoded_chars[4] = {};
-  // uint16_t encoded_chars[4] = {
-  //     0b0010010100001111,
-  //     0b0000000001111001,
-  //     0b0001000001010000,
-  //     0b0000001100001101};
+size_t HT16K33Component::print(const char *str) {
+  uint16_t encoded_chars[display_size] = {};
   uint8_t i = 0;
   while (*str != '\0' && i < display_size)
   {

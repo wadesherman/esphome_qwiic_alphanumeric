@@ -13,12 +13,12 @@ typedef enum {
   CMD_DIMMING_SETUP = 0xE0,
 } command_t;
 
-typedef enum {  // CMD_SYSTEM_SETUP
+typedef enum {
   ON = 0b1,
   OFF = 0b0,
 } state_t;
 
-typedef enum {  // CMD_DISPLAY_SETUP
+typedef enum {
   BLINK_RATE_NOBLINK = 0x0,
   BLINK_RATE_2HZ = 0x2,
   BLINK_RATE_1HZ = 0x4,
@@ -44,6 +44,15 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   // state
   uint8_t decimal_state = OFF;
   uint8_t colon_state = OFF;
+
+  // h4	h3	h2	h1	a4	a3	a2	a1
+  // i4	i3	i2	i1	b4	b3	b2	b1
+  // j4	j3	j2	j1	c4	c3	c2	c1
+  // k4	k3	k2	k1	d4	d3	d2	d1
+  // l4	l3	l2	l1	e4	e3	e2	e1
+  // m4	m3	m2	m1	f4	f3	f2	f1
+  // n4	n3	n2	n1	g4	g3	g2	g1
+  // -- --  --	--	--	--	--	--
   uint8_t segment_data[char_bytes_size] = {};
   uint8_t *memory_template[mem_size] = {
       &segment_data[0],
@@ -71,6 +80,8 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   bool set_colon_state(uint8_t desired_colon_state, bool update_now);
   bool set_decimal_state(uint8_t desired_decimal_state, bool update_now);
 
+  size_t write(uint16_t *encoded_chars);
+
   bool write_data(uint8_t *mem);
   bool write_command(uint8_t reg);
 
@@ -92,8 +103,7 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   bool decimal_on(bool update_now);
   bool decimal_off(bool update_now);
 
-  size_t write(uint16_t *encoded_chars);
-  size_t write(const char *str);
+  size_t print(const char *str);
 
   bool update_display();
 
