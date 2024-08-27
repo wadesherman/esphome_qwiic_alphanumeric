@@ -68,6 +68,12 @@ bool HT16K33Component::set_colon_state(uint8_t desired_colon_state, bool update_
   }
 }
 
+void HT16K33Component::clear_segment_data() {
+  for(uint8_t i = 0; i < char_bytes_size; i++){
+    segment_data[i] = 0;
+  }
+}
+
 size_t HT16K33Component::write(uint16_t *encoded_chars) {
   // 01010000 n-h4
   // 00001100 n-h3
@@ -78,6 +84,8 @@ size_t HT16K33Component::write(uint16_t *encoded_chars) {
   // 00000011 g-a2
   // 00000001 g-a1
   uint8_t split_encoding[char_bytes_size] = {};
+
+  clear_segment_data();
 
   for (uint8_t i = 0; i < display_size; i++)
   {

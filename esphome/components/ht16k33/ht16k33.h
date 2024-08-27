@@ -80,6 +80,7 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   bool set_colon_state(uint8_t desired_colon_state, bool update_now);
   bool set_decimal_state(uint8_t desired_decimal_state, bool update_now);
 
+  void clear_segment_data();
   size_t write(uint16_t *encoded_chars);
 
   bool write_data(uint8_t *mem);
