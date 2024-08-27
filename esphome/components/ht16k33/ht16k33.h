@@ -104,7 +104,9 @@ class HT16K33Component : public PollingComponent, public i2c::I2CDevice {
   bool decimal_on(bool update_now);
   bool decimal_off(bool update_now);
 
-  size_t print(const char *str);
+  void print(const char *str);
+  void print(const std::string &str);
+  void printf(const char *format, ...) __attribute__((format(printf, 2, 3)));
 
   bool update_display();
 

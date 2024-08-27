@@ -112,7 +112,7 @@ size_t HT16K33Component::write(uint16_t *encoded_chars) {
   return 0;
 }
 
-size_t HT16K33Component::print(const char *str) {
+void HT16K33Component::print(const char *str) {
   uint16_t encoded_chars[display_size] = {};
   uint8_t i = 0;
   while (*str != '\0' && i < display_size)
@@ -122,7 +122,19 @@ size_t HT16K33Component::print(const char *str) {
     i++;
   }
 
-  return write(encoded_chars);
+  write(encoded_chars);
+}
+
+void HT16K33Component::print(const std::string &str) { print(str.c_str()); }
+
+void HT16K33Component::printf(const char *format, ...) {
+  va_list arg;
+  va_start(arg, format);
+  char buffer[64];
+  int ret = vsnprintf(buffer, sizeof(buffer), format, arg);
+  va_end(arg);
+  if (ret > 0)
+    print(buffer);
 }
 
 bool HT16K33Component::update_display() {
